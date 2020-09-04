@@ -1,0 +1,179 @@
+body {
+  font-family: "Montserrat", sans-serif;
+  padding: 0;
+  margin: 0 auto;
+  background-color: #fff;
+  max-width: 1000px;
+  overflow: hidden;
+}
+
+.changePassword {
+  width: 100%;
+  float: left;
+  height: 400px;
+  box-sizing: border-box;
+  margin-top: 10px;
+}
+
+#changePasswordPadding {
+  padding: 0 20 0 20;
+}
+
+#changePasswordTitle {
+  font-size: 20px;
+  background-color: #3383ff;
+  float: left;
+  width: 100%;
+  color: white;
+  padding-left: 20px;
+  font-weight: bold;
+  box-sizing: border-box;
+}
+
+#hamburger a:hover {
+  background-color: #dbdbdd;
+}
+
+.input {
+  background-color: #fcfcfc;
+  height: 270px;
+  padding: 0 20 0 20;
+  width: 100%;
+  box-sizing: border-box;
+  float: left;
+  margin-top: 20px;
+  border-radius: 10px;
+}
+
+input[type="submit"] {
+  width: 100%;
+  background-color: #4caf50;
+  color: white;
+  padding: 14px 20px;
+  margin: 8px 0;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-family: "Montserrat", sans-serif;
+  text-transform: uppercase;
+}
+
+input[type="submit"]:hover {
+  background-color: green;
+}
+
+input[type="text"] {
+  float: left;
+  height: 40px;
+  width: 100%;
+  border-bottom: 1px solid #efefef;
+  padding: 12px 20px 4px 0px;
+  color: black;
+  font-size: 10px;
+  background-color: #fcfcfc;
+  outline: none;
+  margin-bottom: 20px;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  font-family: "Montserrat", sans-serif;
+}
+
+input[type="text"]:focus {
+  border-bottom: 3px solid #efefef;
+}
+
+#lastClassText {
+  padding: 7 0 7 0;
+  position: relative;
+  color: white;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.lastClassBox {
+  bottom: 0;
+  min-height: 50px;
+  width: 100%;
+  box-sizing: border-box;
+  float: left;
+  cursor: pointer;
+  background-color: #ff0025;
+  position: sticky;
+  margin-top: 10px;
+}
+
+.lastClassArrow {
+  height: 24px;
+  width: auto;
+  float: left;
+  margin-top: 13px;
+  margin-right: 20px;
+}
+
+.lastClassPadding {
+  padding: 0 20 0 20;
+}
+
+#logo {
+  width: 24px;
+  height: 24px;
+}
+
+.menu {
+  background-color: white;
+  width: 100%;
+  min-height: 40px;
+  float: left;
+  overflow: hidden;
+  position: relative;
+}
+
+.menu a {
+  color: #1e1e1e;
+  display: block;
+  padding: 8px 25px 8px 25px;
+  font-size: 12px;
+  text-decoration: none;
+  border-bottom: 1px solid #dbdbdd;
+  text-transform: uppercase;
+}
+
+.menu a.bars {
+  border-left: 2px solid white;
+  display: block;
+  position: absolute;
+  right: 0;
+  top: 0;
+  cursor: pointer;
+}
+
+.menu #hamburger {
+  display: none;
+}
+
+.menuLogo {
+  background-color: #051b23;
+}
+
+::placeholder {
+  color: black;
+  text-transform: uppercase;
+  font-size: 10px;
+}
+.alert-wrong-password {
+  background-color: red;
+  float: left;
+  width: 100%;
+  color: white;
+  padding-left: 20px;
+  box-sizing: border-box;
+}
+.alert-success {
+    background-color: green;
+    float: left;
+    width: 100%;
+    color: white;
+    padding-left: 20px;
+    box-sizing: border-box;
+  }

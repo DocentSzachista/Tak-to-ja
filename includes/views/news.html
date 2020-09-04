@@ -1,0 +1,133 @@
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="../css/PODSTRONA_wiadomosci_wszystkie.css"
+    />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat&display=swap"
+      rel="stylesheet"
+    />
+
+    <title>Strona Główna Ucznia</title>
+  </head>
+
+  <body>
+    <div class="menu">
+      <a href="https://www.w3schools.com/" class="menuLogo">
+        <img id="logo" src="../assets/sygnet_white.png" />
+      </a>
+
+      <div id="hamburger">
+        <a href="#ostatniaLekcja">Ostatnia Lekcja</a>
+        <a href="#wiadomosci">Wiadomości</a>
+        <a href="#plan">Plan</a>
+        <a href="#profil">Zmiana hasła</a>
+        <a href="#logOut">Wyloguj się</a>
+      </div>
+
+      <a class="bars" onclick="myFunction()">
+        <img
+          src="../assets/IKONY_strona_glowna/bars_white.png"
+          style="height: 24px;"
+        />
+      </a>
+    </div>
+
+    <div id="newsPadding">
+      <div class="news">
+        <div id="newsHeader">
+          <p>Wiadomości</p>
+        </div>
+
+        <div class="newsTitle" onclick="news()">
+          <p>
+            Tytuł Newsa. Lorem Ipsum is simply dummy text of the printing and
+            typesetting industry.
+          </p>
+        </div>
+
+        <div id="newsText">
+          <p>
+            Lorem Ipsum is simply dummy text of the printing and typesetting
+            industry. Lorem Ipsum has been the industry's standard dummy text
+            ever since the 1500s, when an unknown printer took a galley of type
+            and scrambled it to make a type specimen book. It has survived not
+            only five centuries, but also the leap into electronic typesetting,
+            remaining essentially unchanged. It was popularised in the 1960s
+            with the release of Letraset sheets containing Lorem Ipsum passages,
+            and more recently with desktop publishing software like Aldus
+            PageMaker including versions of Lorem Ipsum.
+          </p>
+        </div>
+
+        <div class="newsTitle" onclick="news01()">
+          <p>
+            Tytuł Newsa. Lorem Ipsum is simply dummy text of the printing and
+            typesetting industry.
+          </p>
+        </div>
+
+        <div id="newsText01">
+          <p>
+            Lorem Ipsum is simply dummy text of the printing and typesetting
+            industry. Lorem Ipsum has been the industry's standard dummy text
+            ever since the 1500s, when an unknown printer took a galley of type
+            and scrambled it to make a type specimen book. It has survived not
+            only five centuries, but also the leap into electronic typesetting,
+            remaining essentially unchanged. It was popularised in the 1960s
+            with the release of Letraset sheets containing Lorem Ipsum passages,
+            and more recently with desktop publishing software like Aldus
+            PageMaker including versions of Lorem Ipsum.
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <div class="lastClassPadding">
+      <div class="lastClassBox">
+        <img
+          class="lastClassArrow"
+          src="../assets/IKONY_kalendarz/arrow_left_white.png"
+        />
+
+        <div id="lastClassText">
+          <p>Ostatnia lekcja</p>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function myFunction() {
+        var x = document.getElementById("hamburger");
+        if (x.style.display === "block") {
+          x.style.display = "none";
+        } else {
+          x.style.display = "block";
+        }
+      }
+
+      function news() {
+        var x = document.getElementById("newsText");
+        if (x.style.display === "block") {
+          x.style.display = "none";
+        } else {
+          x.style.display = "block";
+        }
+      }
+
+      function news01() {
+        var x = document.getElementById("newsText01");
+        if (x.style.display === "block") {
+          x.style.display = "none";
+        } else {
+          x.style.display = "block";
+        }
+      }
+    </script>
+  </body>
+</html>

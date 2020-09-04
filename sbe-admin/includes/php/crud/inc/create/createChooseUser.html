@@ -1,0 +1,30 @@
+<div class="container">
+    <div class="span10 offset1">
+      <div class="row">
+        <h2><label for="usertype">Wybierz typ ucznia</label></h2>
+      </div >
+      <div class="col-md-3"><select name="usertype" id="usertype" class="form-control">
+        <option></option>
+        <option value="singleUser">Uczeń dorosły</option>
+        <option value="singleUserParent">Uczeń z istniejącym rodzicem</option>
+        <option value="userParent">Uczeń z rodzicem</option>
+      </select>
+      <div class="form-row">
+        <div class="actions" style="margin-top:20px;">
+          <a class="btn btn-success" href="#" id="next"><span data-feather="arrow-up"></span> Dalej</a>
+          <a class="btn btn-primary" href="../../main.php?p=students"><span data-feather="arrow-left"></span> Wstecz</a>
+        </div>
+      </div>
+    </div>
+      
+     
+    </div>
+  </div>
+  <script>
+  var next = document.getElementById("next")
+  var select = document.getElementById("usertype")
+  select.addEventListener("change", function (){
+    next.href = "?p="+ this.value
+  })
+
+</script>
