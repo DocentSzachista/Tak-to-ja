@@ -46,3 +46,4 @@ if ($userType == "student") {
     include('./includes/views/indexParent.php');
   }
 }
+?>
