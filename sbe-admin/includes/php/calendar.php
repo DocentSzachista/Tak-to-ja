@@ -1,76 +1,76 @@
-<main role="main" class="main col-md-9 ml-sm-auto col-lg-10 px-md-4">
-    <?php
-    require 'crud/connectDB_CRUD.php';
-    require 'crud\inc\functions.php';
-    $pdo = Database::connect();
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    $sql = "SELECT * FROM sbe_lesson";
-    $q = $pdo->prepare($sql);
-    $q2 = $pdo->prepare($sql);
-    $q->execute();
-    $q2->execute();
-    $data = $q->fetch(PDO::FETCH_ASSOC);
-    $iteration = $q2->fetchAll();
-    if (isset($_POST['update-lesson'])) {
-        $topic = $_POST['topic'];
-        $date = $_POST['date'];
-        $challenge = $_POST['challenge'];
-        $id = $_POST['lesson_id'];
-        $start_time = $_POST['start_time'];
-        $end_time = $_POST['end_time'];
-        $attendanceData = $_POST['attendance'];
+<?php
+require 'crud/connectDB_CRUD.php';
+require 'crud/inc/functions.php';
+$pdo = Database::connect();
+$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+$sql = "SELECT * FROM sbe_lesson";
+$q = $pdo->prepare($sql);
+$q2 = $pdo->prepare($sql);
+$q->execute();
+$q2->execute();
+$data = $q->fetch(PDO::FETCH_ASSOC);
+$iteration = $q2->fetchAll();
+if (isset($_POST['update-lesson'])) {
+    $topic = $_POST['topic'];
+    $date = $_POST['date'];
+    $challenge = $_POST['challenge'];
+    $id = $_POST['lesson_id'];
+    $start_time = $_POST['start_time'];
+    $end_time = $_POST['end_time'];
+    $attendanceData = $_POST['attendance'];
+    $valid = true;
+    if ($valid) {
+        $sqlINSERT = "UPDATE sbe_lesson SET topic = ?, date=?, challenge=?, lesson_time=?, end_time=? WHERE id = ?";
+        $arrayOfInputs = array($topic, $date, $challenge, $start_time, $end_time, $id);
+        addFutureUser($sqlINSERT,  $arrayOfInputs);
+        //TODO: Update dla checkboxów
+        foreach ($attendanceData as $key => $value) {
+            $sqlUPDATE = "UPDATE sbe_attendance SET participated=? WHERE id=?";
+            $arrayOfInputs = array($value, $key);
+            addFutureUser($sqlUPDATE, $arrayOfInputs);
+        }
+        header("Refresh:0");
+    }
+}
+if (isset($_POST['add-lesson-submit'])) {
+    $newPostTeam = $_POST['team_name-add'];
+    $newPostTopic = $_POST['topic-add'];
+    $newPostDate = $_POST['date-add'];
+    $newPostStart = $_POST['start_time-add'];
+    $newPostChallenge = $_POST['challenge-add'];
+    $newEndTime = $_POST['end_time-add'];
+    $valid = false;
+    $sql = "SELECT * FROM sbe_teams where team_name = ?";
+    $team_id = searchUser($newPostTeam, $sql, 'id');
+    if (!empty($team_id)) {
         $valid = true;
-        if ($valid) {
-            $sqlINSERT = "UPDATE sbe_lesson SET topic = ?, date=?, challenge=?, lesson_time=?, end_time=? WHERE id = ?";
-            $arrayOfInputs = array($topic, $date, $challenge, $start_time, $end_time, $id);
-            addFutureUser($sqlINSERT,  $arrayOfInputs);
-            //TODO: Update dla checkboxów
-            foreach ($attendanceData as $key => $value) {
-                $sqlUPDATE = "UPDATE sbe_attendance SET participated=? WHERE id=?";
-                $arrayOfInputs = array($value, $key);
-                addFutureUser($sqlUPDATE, $arrayOfInputs);
-            }
-            header("Refresh:0");
-        }
+    } else {
+        header("Location: main.php?p=error");
     }
-    if (isset($_POST['add-lesson-submit'])) {
-        $newPostTeam = $_POST['team_name-add'];
-        $newPostTopic = $_POST['topic-add'];
-        $newPostDate = $_POST['date-add'];
-        $newPostStart = $_POST['start_time-add'];
-        $newPostChallenge = $_POST['challenge-add'];
-        $newEndTime = $_POST['end_time-add'];
-        $valid = false;
-        $sql = "SELECT * FROM sbe_teams where team_name = ?";
-        $team_id = searchUser($newPostTeam, $sql, 'id');
-        if (!empty($team_id)) {
-            $valid = true;
-        } else {
-            header("Location: main.php?p=error");
-        }
-        if ($valid) {
-            $sqlINSERT = "INSERT INTO sbe_lesson (team_id, topic, date, lesson_time, end_time, challenge) values(?,?,?,?,?,?)";
-            $arrayOfInputs = array($team_id, $newPostTopic, $newPostDate, $newPostStart, $newEndTime, $newPostChallenge);
-            addFutureUser($sqlINSERT,  $arrayOfInputs);
-            header("Refresh:0");
-        }
+    if ($valid) {
+        $sqlINSERT = "INSERT INTO sbe_lesson (team_id, topic, date, lesson_time, end_time, challenge) values(?,?,?,?,?,?)";
+        $arrayOfInputs = array($team_id, $newPostTopic, $newPostDate, $newPostStart, $newEndTime, $newPostChallenge);
+        addFutureUser($sqlINSERT,  $arrayOfInputs);
+        header("Refresh:0");
     }
-    if (isset($_POST['delete-lesson'])) {
-        if (!empty($_POST['lesson_id'])) {
-            $id = $_POST['lesson_id'];
-            $pdo = Database::connect();
-            $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $sql = "SELECT * FROM sbe_lesson where id = ?";
-            $q = $pdo->prepare($sql);
-            $q->execute(array($id));
-            $data = $q->fetch(PDO::FETCH_ASSOC);
-        }
-        if (!empty($_POST)) {
-            $sql = "DELETE FROM sbe_lesson WHERE id = ?";
-            delete($sql, true);
-        }
+}
+if (isset($_POST['delete-lesson'])) {
+    if (!empty($_POST['lesson_id'])) {
+        $id = $_POST['lesson_id'];
+        $pdo = Database::connect();
+        $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $sql = "SELECT * FROM sbe_lesson where id = ?";
+        $q = $pdo->prepare($sql);
+        $q->execute(array($id));
+        $data = $q->fetch(PDO::FETCH_ASSOC);
     }
-    ?>
+    if (!empty($_POST)) {
+        $sql = "DELETE FROM sbe_lesson WHERE id = ?";
+        delete($sql, true);
+    }
+}
+?>
+<main role="main" class="main col-md-9 ml-sm-auto col-lg-10 px-md-4">
     <form method="post">
         <div>
             <div id='calendar'></div>
@@ -235,7 +235,7 @@
                             clickCheckbox[k].checked = true;
                         }
                     }
-                    $('input[type=`checkbox`]').on('change', function(e) {
+                    $('input[type=checkbox]').on('change', function(e) {
                         if ($(this).prop('checked')) {
                             $(this).next().val(1);
                         } else {
@@ -278,7 +278,13 @@
                                 endLessonTime: '" . $row['end_time'] . "',
                                 CustomStudentList: '";
                         foreach ($dataAttendance as $lessonRow) {
-                            echo $lessonRow['id'] . ":" . $lessonRow['student_id'] . ":" . $lessonRow['participated'] . ";";
+                            $sqlStudentName = "SELECT * FROM sbe_students WHERE id=?";
+                            $array = array($lessonRow['student_id']);
+                            $q = $pdo->prepare($sqlStudentName);
+                            $q->execute($array);
+                            $studentNameData = $q->fetch(PDO::FETCH_ASSOC);
+
+                            echo $lessonRow['id'] . ":" .  $studentNameData['firstname'] . " " . $studentNameData['lastname'] . ":" . $lessonRow['participated'] . ";";
                         }
                         echo "',},";
                     }

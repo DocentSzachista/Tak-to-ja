@@ -37,9 +37,8 @@ if (!empty($_POST)) {
     // validate input
     $valid = true;
     if ($valid) {
-        $password = password_hash($password, PASSWORD_DEFAULT);
-        $sqlINSERT = "UPDATE sbe_students SET email = ?, firstname=?, lastname=?, phone=?, team=?, password=? WHERE id = ?";
-        $arrayOfInputs = array($email, $firstname, $lastname, $phone, $team, $password, $id);
+        $sqlINSERT = "UPDATE sbe_students SET email = ?, firstname=?, lastname=?, phone=?, team=? WHERE id = ?";
+        $arrayOfInputs = array($email, $firstname, $lastname, $phone, $team, $id);
         addFutureUser($sqlINSERT,  $arrayOfInputs);
         $sqlINSERT = "UPDATE sbe_informations SET address = ?, photo_permission=?, self_reliance=?, invoice=?, end_of_contract=? WHERE student_id = ?";
         $arrayOfInputs = array($address, $photoPermission, $selfReliance, $invoice, $endOfContract, $id);
@@ -55,8 +54,6 @@ if (!empty($_POST)) {
             $parentLastName = $_POST['parentLastname'];
             $parentPhone = $_POST['parent-phone'];
             $parentEmail = $_POST['parent-email'];
-
-            $password = $_POST['password'];
             $sqlINSERT = "UPDATE sbe_parents SET firstname=?, lastname=?, phone=?, email = ? WHERE id = ?";
             $arrayOfInputs = array($parentFirstName, $parentLastName, $parentPhone, $parentEmail, $id);
             addFutureUser($sqlINSERT,  $arrayOfInputs);
@@ -76,7 +73,7 @@ if (!empty($_POST)) {
     $phone = $data['phone'];
     $login = $data['login'];
     $team = $data['team'];
-    $password = $data['password'];
+    $birthyear = $data['birthday'];
     Database::disconnect();
     $pdo = Database::connect();
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -108,12 +105,6 @@ if (!empty($_POST)) {
                 </div>
                 <hr style="width: 100%; height: 1px; background-color:lightgray;" />
                 <!-- start of rows -->
-                <div class="form-row">
-                    <div class="form-group col-md-3">
-                        <label>Hasło</label>
-                        <input type="text" id="parentInputPassword" name="parentPassword" class="form-control" value="<?php echo !empty($parentData['password']) ? $parentData['password'] : ''; ?>" required readonly>
-                    </div>
-                </div>
                 <div class="form-row">
                     <div class="form-group col-md-3">
                         <label>Imię</label>
@@ -150,10 +141,6 @@ if (!empty($_POST)) {
                     <label for="userlogin">Login</label>
                     <input type="text" id="userlogin" name="login" class="form-control" value="<?php echo !empty($login) ? $login : ''; ?>" required readonly>
                 </div>
-                <div class="form-group col-md-3">
-                    <label for="inputPassword">Hasło</label>
-                    <input type="text" id="inputPassword" name="password" class="form-control" value="<?php echo !empty($password) ? $password : ''; ?>" required>
-                </div>
             </div>
             <div class="form-row">
                 <div class="form-group col-md-3">
@@ -180,6 +167,10 @@ if (!empty($_POST)) {
                 <div class="form-group col-md-3">
                     <label for="team">Grupa</label>
                     <input type="text" id="team" name="team" class="form-control" value="<?php echo !empty($team) ? $team : ''; ?>" required>
+                </div>
+                <div class="form-group col-md-3">
+                    <label for="birthyear">Rok urodzenia</label>
+                    <input type="number" id="birthyear" name="birthyear" class="form-control" value="<?php echo !empty($birthyear) ? $birthyear : ''; ?>" required>
                 </div>
             </div>
             <div class="form-row">

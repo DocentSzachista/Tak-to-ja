@@ -70,7 +70,6 @@
                                 $iterations = $q->fetchAll();
                                 $iteration = array_unique(array_merge($iteration, $iterations), SORT_REGULAR);
                             }
-        
                         } else if ($userType == "teacher") {
                             $sqlTeam = "SELECT * FROM sbe_teams where leader_id=?";
                             $t = $pdo->prepare($sqlTeam);
@@ -444,8 +443,7 @@
                                     dayMaxEvents: true, // allow "more" link when too many events
                                     events: [
 
-                                        <?php foreach ($iteration as $row) 
-                                        {
+                                        <?php foreach ($iteration as $row) {
 
                                             $id = $row['team_id'];
 
@@ -453,43 +451,34 @@
                                             $querys = $pdo->prepare($sql);
                                             $querys->execute(array($id));
                                             $teamInfo = $querys->fetch(PDO::FETCH_ASSOC);
-                                            if ($userType == "student") 
-                                            {
+                                            if ($userType == "student") {
                                                 $sqlAttendance = "SELECT * FROM sbe_attendance INNER JOIN sbe_students ON sbe_students.id=sbe_attendance.student_id WHERE lesson_id=? AND student_id=?";
                                                 $array = array($row['id'], $userData['id']);
                                                 $q = $pdo->prepare($sqlAttendance);
                                                 $q->execute($array);
                                                 $dataAttendance = $q->fetchAll();
-                                            }
-                                             else if($userType == "parent")
-                                            {
+                                            } else if ($userType == "parent") {
                                                 $sql = "SELECT id FROM sbe_students WHERE id_parent_key=?";
                                                 $m = $pdo->prepare($sql);
                                                 $m->execute(array($userData['id']));
                                                 $id_student = $m->fetchAll();
-                                                $dataAttendance= array();
-                                                foreach($id_student as $ids)
-                                                {
+                                                $dataAttendance = array();
+                                                foreach ($id_student as $ids) {
                                                     $sqlAttendance = "SELECT * FROM sbe_attendance INNER JOIN sbe_students ON sbe_students.id=sbe_attendance.student_id WHERE lesson_id=? AND student_id=?";
                                                     $array = array($row['id'], $ids['id']);
                                                     $q = $pdo->prepare($sqlAttendance);
                                                     $q->execute($array);
                                                     $dataAttendances = $q->fetchAll();
-                                                    $dataAttendance=array_merge($dataAttendance, $dataAttendances);
-                                                    
+                                                    $dataAttendance = array_merge($dataAttendance, $dataAttendances);
                                                 }
-                                                
-                                            }
-                                             else if ($userType == "teacher") 
-                                            {
-                                                $sqlAttendance = "SELECT * FROM sbe_attendance INNER JOIN sbe_students ON sbe_attendance.student_id=sbe_students.id WHERE lesson_id=? ";
+                                            } else if ($userType == "teacher") {
+                                                $sqlAttendance = "SELECT * FROM sbe_attendance WHERE lesson_id=? ";
                                                 $array = array($row['id']);
                                                 $q = $pdo->prepare($sqlAttendance);
                                                 $q->execute($array);
                                                 $dataAttendance = $q->fetchAll();
-                                                
                                             }
-                                           
+
 
                                             Database::disconnect();
                                             $title = $row['topic'];
@@ -508,13 +497,17 @@
         endLessonTime: '" . $row['end_time'] . "',
         CustomStudentList: '";
                                             foreach ($dataAttendance as $lessonRow) {
-                                                    next($lessonRow);
-                                                    echo $lessonRow['id'] . ":" .  $lessonRow['firstname']. " ".$lessonRow['lastname'] . ":" . $lessonRow['participated'] . ";";
+                                                $sqlStudentName = "SELECT * FROM sbe_students WHERE id=?";
+                                                $array = array($lessonRow['student_id']);
+                                                $q = $pdo->prepare($sqlStudentName);
+                                                $q->execute($array);
+                                                $studentNameData = $q->fetch(PDO::FETCH_ASSOC);;
+
+                                                echo $lessonRow['id'] . ":" .  $studentNameData['firstname'] . " " . $studentNameData['lastname'] . ":" . $lessonRow['participated'] . ";";
                                             }
                                             echo "',},";
-                                            
                                         }
-                                        
+
                                         ?>
                                     ]
                                 });
@@ -563,7 +556,7 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.9.0/feather.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.3/Chart.min.js"></script>
-    
+
 </body>
 
 </html>

@@ -28,16 +28,22 @@
           if ($newPassword == $checkPassword) {
             $password = $newPassword;
             $password = password_hash($password, PASSWORD_DEFAULT);
-            $sqlINSERT = "UPDATE sbe_students SET password=? WHERE id = ?";
+            if ($userType == "student") {
+              $sqlINSERT = "UPDATE sbe_students SET password=? WHERE id = ?";
+            } elseif ($userType == "parent") {
+              $sqlINSERT = "UPDATE sbe_parents SET password=? WHERE id = ?";
+            } elseif ($userType == "teacher") {
+              $sqlINSERT = "UPDATE sbe_teachers SET password=? WHERE id = ?";
+            }
             $arrayOfInputs = array($password, $id);
             $pdo = Database::connect();
             $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $q = $pdo->prepare($sqlINSERT);
             $q->execute($arrayOfInputs);
-            Database::disconnect();
             echo "<div class='alert-success' role='alert'><p>
         Hasło zostało zmienione!</p>
       </div>";
+            Database::disconnect();
           } else {
             echo "<div class='alert-wrong-password' role='alert'>
         <p>
@@ -50,16 +56,12 @@
     </div>";
         }
       }
-
-
-
-
       ?>
 
       <div class="input">
         <form action="" method="post">
           <p class="inputBox">
-            <input type="text" name="current-password" placeholder="Aktualne hasło" required/>
+            <input type="text" name="current-password" placeholder="Aktualne hasło" required />
           </p>
 
           <p class="inputBox">
@@ -100,28 +102,3 @@
 </body>
 
 </html>
-<?php
-/// zmiana hasła
-if (isset($_POST['submit'])) {
-  $id = $_SESSION['userId'];
-  $actualPwdFromForm = $_POST['password-actual'];
-  $newPwd = filter_var($_POST['password-new'], FILTER_SANITIZE_STRING);
-  $checkPwd = filter_var($_POST['password-check'], FILTER_SANITIZE_STRING);
-  $actualpwd = $user->returnData('password');
-  if ($actualpwd == $actualPwdFromForm) {
-    if ($newPwd == $checkPwd) {
-      $hash = password_hash($newPwd, PASSWORD_DEFAULT);
-      $sql = "UPDATE sbe_students SET password =? WHERE id=?";
-      $pdo->prepare($sql);
-      $query = $pdo->execute(array($hash, $id));
-      //odnośnik z informacją o sukcesie 
-    } else {
-      //tutaj jakiś odnośnik że hasła się nie matchują czy coś
-    }
-  } else {
-    //hasło nie pokrywa się z aktualnym
-  }
-}
-
-
-?>

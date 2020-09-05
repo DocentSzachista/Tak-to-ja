@@ -102,6 +102,10 @@ if (null == $id) {
                     <label for="team">Grupa</label>
                     <input type="text" id="team" name="team" class="form-control" value="<?php echo !empty($data['team']) ? $data['team'] : ''; ?>" required readonly>
                 </div>
+                <div class="form-group col-md-3">
+                    <label for="birthyear">Rok urodzenia</label>
+                    <input type="number" id="birthyear" name="birthyear" class="form-control" value="<?php echo !empty($data['birthday']) ? $$data['birthday'] : ''; ?>" required>
+                </div>
             </div>
             <div class="form-row">
                 <div class="form-group col-md-3">
