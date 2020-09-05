@@ -28,11 +28,11 @@
           if ($newPassword == $checkPassword) {
             $password = $newPassword;
             $password = password_hash($password, PASSWORD_DEFAULT);
-            if ($userData['userType'] == 'student') {
+            if ($userType == "student") {
               $sqlINSERT = "UPDATE sbe_students SET password=? WHERE id = ?";
-            } elseif ($userData['userType'] == 'parent') {
+            } elseif ($userType == "parent") {
               $sqlINSERT = "UPDATE sbe_parents SET password=? WHERE id = ?";
-            } elseif ($userData['userType'] == 'teacher') {
+            } elseif ($userType == "teacher") {
               $sqlINSERT = "UPDATE sbe_teachers SET password=? WHERE id = ?";
             }
             $arrayOfInputs = array($password, $id);

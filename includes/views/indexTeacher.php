@@ -9,8 +9,6 @@
 
   <title>Strona Główna Nauczyciela</title>
   <?php
-
-
   $today = date('Y-m-d');
   $now = date("h:i:sa");
   $sqlTeam = 'SELECT * from sbe_teams where leader_id =?';
@@ -33,16 +31,17 @@
 
   $sqlNews = 'SELECT * FROM sbe_news WHERE id=?';
   $newsData = selectTeamLess($sqlNews, array(1), $pdo, false);
+  $id;
+  $lastLessonTeamId;
+  foreach ($lastLessonData as $row) {
+    $id = $row['id'];
+    $lastLessonTeamId = $row['team_id'];
+
+    break;
+  }
 
   if (isset($_POST['submit-lesson-input-test'])) {
-    $id;
-    $lastLessonTeamId;
-    foreach ($lastLessonData as $row) {
-      $id = $row['id'];
-      $lastLessonTeamId = $row['team_id'];
 
-      break;
-    }
     $lessonTopic = $_POST['lessonTopic'];
     $lessonChallenge = $_POST['lessonChallenge'];
     $lessonAdditional = $_POST['lessonAdditional'];
@@ -105,14 +104,14 @@
     <form action="" method="POST">
       <p class="inputBox">
         <?php
-        if (!empty($lastLessonData)){
+        if (!empty($lastLessonData)) {
           $sqlLastTeam = 'SELECT * from sbe_teams where id =?';
-        $teamLastData = selectTeamLess($sqlLastTeam, array($lastLessonTeamId), $pdo, false);
-        echo $teamLastData['team_name'];
+          $teamLastData = selectTeamLess($sqlLastTeam, array($lastLessonTeamId), $pdo, false);
+          echo $teamLastData['team_name'];
         } else {
           echo "BRAK";
         }
-        
+
 
         ?></p>
       <p class="inputBox">

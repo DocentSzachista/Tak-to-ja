@@ -278,7 +278,13 @@ if (isset($_POST['delete-lesson'])) {
                                 endLessonTime: '" . $row['end_time'] . "',
                                 CustomStudentList: '";
                         foreach ($dataAttendance as $lessonRow) {
-                            echo $lessonRow['id'] . ":" . $lessonRow['student_id'] . ":" . $lessonRow['participated'] . ";";
+                            $sqlStudentName = "SELECT * FROM sbe_students WHERE id=?";
+                            $array = array($lessonRow['student_id']);
+                            $q = $pdo->prepare($sqlStudentName);
+                            $q->execute($array);
+                            $studentNameData = $q->fetch(PDO::FETCH_ASSOC);;
+
+                            echo $lessonRow['id'] . ":" .  $studentNameData['firstname'] . " " . $studentNameData['lastname'] . ":" . $lessonRow['participated'] . ";";
                         }
                         echo "',},";
                     }
