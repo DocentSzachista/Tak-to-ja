@@ -119,7 +119,6 @@
                             $newPostChallenge = $_POST['challenge-add'];
                             $newEndTime = $_POST['end_time-add'];
                             $valid = false;
-
                             $sql = "SELECT * FROM sbe_teams where team_name = ?";
                             $team_id = searchUser($newPostTeam, $sql, 'id');
                             if (!empty($team_id)) {
@@ -130,11 +129,22 @@
                             if ($valid) {
                                 $sqlINSERT = "INSERT INTO sbe_lesson (team_id, topic, date, lesson_time, end_time, challenge) values(?,?,?,?,?,?)";
                                 $arrayOfInputs = array($team_id, $newPostTopic, $newPostDate, $newPostStart, $newEndTime, $newPostChallenge);
-                                addFutureUser($sqlINSERT, $arrayOfInputs);
-
+                                $modalLessonId=addFutureUser($sqlINSERT,  $arrayOfInputs);
+                                
+                                $sql="SELECT * FROM sbe_students WHERE team=?";
+                                $sth=$pdo->prepare($sql);
+                                $sth->execute([$newPostTeam]);
+                                $attendance=$sth->fetchAll();
+                                foreach($attendance as $row)
+                                {
+                                    $sqlAttendance="INSERT INTO sbe_attendance (lesson_id, student_id) VALUES(?,?)";
+                                    $arrayOfInputs=array($modalLessonId, $row['id']);
+                                    addFutureUser($sqlAttendance, $arrayOfInputs);
+                                }
+                                
                                 header("Refresh:0");
                             }
-                        }
+                    }
 
 
                         if (isset($_POST['delete-lesson'])) {

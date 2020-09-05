@@ -27,7 +27,7 @@ if ($userType == "student") {
   } elseif (isset($_GET['p']) && $_GET['p'] == "schedule") {
     include('./includes/views/schedule.php');
   } else {
-    include('includes/views/indexStudent.php');
+    include('./includes/views/indexStudent.php');
   }
 } elseif ($userType == "teacher") {
   if (isset($_GET['p']) && $_GET['p'] == "profile") {
@@ -35,7 +35,7 @@ if ($userType == "student") {
   } elseif (isset($_GET['p']) && $_GET['p'] == "schedule") {
     include('./includes/views/schedule.php');
   } else {
-    include('includes/views/indexTeacher.php');
+    include('./includes/views/indexTeacher.php');
   }
 } elseif ($userType == "parent") {
   if (isset($_GET['p']) && $_GET['p'] == "profile") {
@@ -43,6 +43,6 @@ if ($userType == "student") {
   } elseif (isset($_GET['p']) && $_GET['p'] == "schedule") {
     include('./includes/views/schedule.php');
   } else {
-    include('includes/views/indexParent.php');
+    include('./includes/views/indexParent.php');
   }
 }
