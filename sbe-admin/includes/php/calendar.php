@@ -235,7 +235,7 @@ if (isset($_POST['delete-lesson'])) {
                             clickCheckbox[k].checked = true;
                         }
                     }
-                    $('input[type=`checkbox`]').on('change', function(e) {
+                    $('input[type=checkbox]').on('change', function(e) {
                         if ($(this).prop('checked')) {
                             $(this).next().val(1);
                         } else {
