@@ -73,6 +73,7 @@
             $q = $pdo->prepare($sqlINSERT);
             $q->execute($arrayOfInputs);
             Database::disconnect();
+            return $pdo->lastInsertId();
     }
     function addTeam($sqlINSERT, $sqlUserExist, $arrayOfInputs)
     {

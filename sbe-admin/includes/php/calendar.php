@@ -51,7 +51,19 @@
         if ($valid) {
             $sqlINSERT = "INSERT INTO sbe_lesson (team_id, topic, date, lesson_time, end_time, challenge) values(?,?,?,?,?,?)";
             $arrayOfInputs = array($team_id, $newPostTopic, $newPostDate, $newPostStart, $newEndTime, $newPostChallenge);
-            addFutureUser($sqlINSERT,  $arrayOfInputs);
+            $modalLessonId=addFutureUser($sqlINSERT,  $arrayOfInputs);
+            
+            $sql="SELECT * FROM sbe_students WHERE team=?";
+            $sth=$pdo->prepare($sql);
+            $sth->execute([$newPostTeam]);
+            $attendance=$sth->fetchAll();
+            foreach($attendance as $row)
+            {
+                $sqlAttendance="INSERT INTO sbe_attendance (lesson_id, student_id) VALUES(?,?)";
+                $arrayOfInputs=array($modalLessonId, $row['id']);
+                addFutureUser($sqlAttendance, $arrayOfInputs);
+            }
+            
             header("Refresh:0");
         }
     }
