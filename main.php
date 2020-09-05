@@ -1,8 +1,7 @@
 <?php
 session_start();
 require_once './includes/php/session.php';
-require 'includes/php/dbConnect.inc.php';
-require_once './includes/php/student.php';
+require './includes/php/dbConnect.inc.php';
 $userId = $_SESSION['userId'];
 $userType = $_SESSION['userType'];
 
