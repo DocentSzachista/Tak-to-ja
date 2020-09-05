@@ -10,7 +10,8 @@ $q->execute();
 $q2->execute();
 $data = $q->fetch(PDO::FETCH_ASSOC);
 $iteration = $q2->fetchAll();
-if (isset($_POST['update-lesson'])) {
+if (isset($_POST['update-lesson'])) 
+{
     $topic = $_POST['topic'];
     $date = $_POST['date'];
     $challenge = $_POST['challenge'];
@@ -31,7 +32,8 @@ if (isset($_POST['update-lesson'])) {
         }
         header("Refresh:0");
     }
-    if (isset($_POST['add-lesson-submit'])) {
+}
+if (isset($_POST['add-lesson-submit'])) {
         $newPostTeam = $_POST['team_name-add'];
         $newPostTopic = $_POST['topic-add'];
         $newPostDate = $_POST['date-add'];
@@ -64,14 +66,8 @@ if (isset($_POST['update-lesson'])) {
             
             header("Refresh:0");
         }
-    }
-    if ($valid) {
-        $sqlINSERT = "INSERT INTO sbe_lesson (team_id, topic, date, lesson_time, end_time, challenge) values(?,?,?,?,?,?)";
-        $arrayOfInputs = array($team_id, $newPostTopic, $newPostDate, $newPostStart, $newEndTime, $newPostChallenge);
-        addFutureUser($sqlINSERT,  $arrayOfInputs);
-        header("Refresh:0");
-    }
 }
+
 if (isset($_POST['delete-lesson'])) {
     if (!empty($_POST['lesson_id'])) {
         $id = $_POST['lesson_id'];
