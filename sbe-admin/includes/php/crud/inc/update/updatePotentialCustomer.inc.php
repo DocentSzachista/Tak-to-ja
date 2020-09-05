@@ -97,6 +97,7 @@ if (isset($_POST['update'])) {
         $arrayOfInputs = array($parentId, $login, $password, $email, $phone, $firstname, $lastname, $birthday, 1);
         addFutureUser($sql, $arrayOfInputs);
     }
+    $pdo = Database::connect();
     $sqlLatestStudent = "SELECT * FROM sbe_students WHERE login=?";
     $array = array($login);
     $q = $pdo->prepare($sqlLatestStudent);
