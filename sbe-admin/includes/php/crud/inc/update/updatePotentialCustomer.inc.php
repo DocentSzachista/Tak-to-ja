@@ -32,13 +32,12 @@ if (isset($_POST['update'])) {
             addFutureUser($sqlINSERT, $arrayOfInputs, $userType);
         }
     }
-} elseif (isset($_POST['createProfile'])) 
-{
+} elseif (isset($_POST['createProfile'])) {
     // wrzucenie ucznia (i) rodzica do bazy i stworzenie sbe_informations pod ucznia -> wszystkie potrzebne dane do parenta/studenta sa w ifach
     $userSelect = $_POST['selectUser'];
     $userId = $id;
     // uczen z istniejacym rodzicem
-    if($userSelect == "student"){ 
+    if ($userSelect == "student") {
         $parentId = $_POST['dropdown'];
         $login = $_POST['userlogin'];
         $password = $_POST['inputPassword'];
@@ -49,11 +48,11 @@ if (isset($_POST['update'])) {
         $birthday = $_POST['birthday'];
         $password = password_hash($password, PASSWORD_DEFAULT);
 
-        $sql="INSERT INTO sbe_students (id_parent_key, login, password, email, phone, firstname, lastname, birthday, ischild) VALUES(?, ?, ?, ?, ?, ?,  ?, ?, ?)";
-        $arrayOfInputs=array($parentId, $login, $password, $email, $phone, $firstname, $lastname, $birthday, 1);
+        $sql = "INSERT INTO sbe_students (id_parent_key, login, password, email, phone, firstname, lastname, birthday, ischild) VALUES(?, ?, ?, ?, ?, ?,  ?, ?, ?)";
+        $arrayOfInputs = array($parentId, $login, $password, $email, $phone, $firstname, $lastname, $birthday, 1);
         addFutureUser($sql, $arrayOfInputs);
-    // uczen dorosly
-    } elseif($userSelect == "adult"){
+        // uczen dorosly
+    } elseif ($userSelect == "adult") {
         $login = $_POST['userlogin'];
         $password = $_POST['inputPassword'];
         $email = $_POST['email'];
@@ -63,11 +62,11 @@ if (isset($_POST['update'])) {
         $birthday = $_POST['birthday'];
         $password = password_hash($password, PASSWORD_DEFAULT);
 
-        $sql="INSERT INTO sbe_students (login, password, email, phone, firstname, lastname, birthday, ischild) VALUES (?, ?, ?, ?, ?, ?, ?, ? )";
-        $arrayOfInputs=array($login, $password, $email, $phone, $firstname, $lastname, $birthday, 0);
+        $sql = "INSERT INTO sbe_students (login, password, email, phone, firstname, lastname, birthday, ischild) VALUES (?, ?, ?, ?, ?, ?, ?, ? )";
+        $arrayOfInputs = array($login, $password, $email, $phone, $firstname, $lastname, $birthday, 0);
         addFutureUser($sql, $arrayOfInputs);
-    // uczen tworzony razem z rodzicem
-    } elseif($userSelect == "studentParent"){
+        // uczen tworzony razem z rodzicem
+    } elseif ($userSelect == "studentParent") {
         $login = $_POST['userlogin'];
         $password = $_POST['inputPassword'];
         $email = $_POST['email'];
@@ -76,8 +75,7 @@ if (isset($_POST['update'])) {
         $lastname = $_POST['lastname'];
         $birthday = $_POST['birthday'];
         $password = password_hash($password, PASSWORD_DEFAULT);
-        if(empty($email))
-        {
+        if (empty($email)) {
             $email = $_POST['parentEmail'];
         }
         $parentPhone = $_POST['parentPhone'];
@@ -86,24 +84,33 @@ if (isset($_POST['update'])) {
         $parentLastname = $_POST['parentLastname'];
         $parentPassword = password_hash($parentPassword, PASSWORD_DEFAULT);
 
-        $sqlParent="INSERT INTO sbe_parents (firstname, lastname, phone, email, password) values(?, ?, ?, ?, ?)";
-        $arrayOfInputs=array($parentFirstname, $parentLastname, $phone, $email, $password);
-        $pdo=Database::connect();
+        $sqlParent = "INSERT INTO sbe_parents (firstname, lastname, phone, email, password) values(?, ?, ?, ?, ?)";
+        $arrayOfInputs = array($parentFirstname, $parentLastname, $phone, $email, $password);
+        $pdo = Database::connect();
         addFutureUser($sqlParent,  $arrayOfInputs);
-         $sql = "SELECT * FROM sbe_parents WHERE email =?";
+        $sql = "SELECT * FROM sbe_parents WHERE email =?";
         $query = $pdo->prepare($sql);
         $query->execute(array($email));
         $row = $query->fetch(PDO::FETCH_ASSOC);
-        $parentId=$row['id'];
-        $sql="INSERT INTO sbe_students (id_parent_key, login, password, email, phone, firstname, lastname, birthday, ischild) VALUES(?, ?, ?, ?, ?, ?,  ?, ?, ?)";
-        $arrayOfInputs=array($parentId, $login, $password, $email, $phone, $firstname, $lastname, $birthday, 1);
+        $parentId = $row['id'];
+        $sql = "INSERT INTO sbe_students (id_parent_key, login, password, email, phone, firstname, lastname, birthday, ischild) VALUES(?, ?, ?, ?, ?, ?,  ?, ?, ?)";
+        $arrayOfInputs = array($parentId, $login, $password, $email, $phone, $firstname, $lastname, $birthday, 1);
         addFutureUser($sql, $arrayOfInputs);
     }
-    deleteUser("DELETE FROM sbe_potential_customers WHERE id=? ",$id);
+    $sqlLatestStudent = "SELECT * FROM sbe_students WHERE login=?";
+    $array = array($login);
+    $q = $pdo->prepare($sqlLatestStudent);
+    $q->execute($array);
+    $studentLatestId = $q->fetch(PDO::FETCH_ASSOC);
+    $studentId = $studentLatestId['id'];
+
+    $sqlInfo = "INSERT INTO sbe_informations (student_id) VALUES(?)";
+    $arrayOfInputs = array($studentId);
+    addFutureUser($sqlInfo, $arrayOfInputs);
+
+    deleteUser("DELETE FROM sbe_potential_customers WHERE id=? ", $id);
     header("Location: ../../main.php?");
-} 
-else
-{
+} else {
     $pdo = Database::connect();
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
     $sql = "SELECT * FROM sbe_potential_customers WHERE id = ?";
