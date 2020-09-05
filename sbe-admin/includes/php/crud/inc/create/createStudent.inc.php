@@ -10,6 +10,8 @@ if (!empty($_POST)) {
     $firstname = $_POST['firstname'];
     $lastname = $_POST['lastname'];
     $password = $_POST['password'];
+    $birthyear = $_POST['birthyear'];
+
     $team = $_POST['dropdown'];
     $selfReliance = 0;
     $photoPermission = 0;
@@ -26,9 +28,9 @@ if (!empty($_POST)) {
 
     if ($valid) {
         $password = password_hash($password, PASSWORD_DEFAULT);
-        $sqlINSERT = "INSERT INTO sbe_students (login,email,phone,firstname,lastname, password, team) values(?, ?, ?, ?, ?, ?, ?)";
+        $sqlINSERT = "INSERT INTO sbe_students (login,email,phone,firstname,lastname,birthday, password, team) values(?,?, ?, ?, ?, ?, ?, ?)";
         $sqlUserExist = "SELECT email FROM sbe_students WHERE email= ?";
-        $arrayOfInputs = array($login, $email, $phone, $firstname, $lastname, $password, $team);
+        $arrayOfInputs = array($login, $email, $phone, $firstname, $lastname, $birthyear, $password, $team);
         $userType = "students";
         // funkcja dodająca użytkownika do bazy. Podajesz comendę zawierającej co gdzie wrzucasz, comendę gdzie 
         //zawierasz którą kolumnę tabel sprawdzasz czy użytkownik istnieje 
@@ -100,6 +102,10 @@ if (!empty($_POST)) {
                     <?php
                     include("../methods/dropdown.php");
                     ?>
+                </div>
+                <div class="form-group col-md-3">
+                    <label>Rok urodzenia</label>
+                    <input type="number" name="birthyear" class="form-control" value="<?php echo !empty($birthyear) ? $birthyear : ''; ?>">
                 </div>
             </div>
             <div class="form-row">

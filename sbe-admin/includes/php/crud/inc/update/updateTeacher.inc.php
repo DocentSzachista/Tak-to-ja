@@ -14,14 +14,12 @@ if (!empty($_POST)) {
     $firstname = $_POST['firstname'];
     $lastname = $_POST['lastname'];
     $phone = $_POST['phone'];
-    $password = $_POST['password'];
     // validate input
     $valid = true;
     if ($valid) {
-        $password = password_hash($password, PASSWORD_DEFAULT);
         $sqlUserExist = "SELECT login FROM sbe_teachers WHERE email= ?";
-        $sqlINSERT = "UPDATE sbe_teachers set firstname=?, email = ?, lastname=?, phone=?, password=? WHERE id = ?";
-        $arrayOfInputs = array( $firstname, $email, $lastname, $phone, $password, $id);
+        $sqlINSERT = "UPDATE sbe_teachers set firstname=?, email = ?, lastname=?, phone=? WHERE id = ?";
+        $arrayOfInputs = array( $firstname, $email, $lastname, $phone, $id);
         $userType = "teachers";
         addUser($sqlINSERT, $sqlUserExist, $arrayOfInputs);
     }
@@ -53,10 +51,6 @@ if (!empty($_POST)) {
                 <div class="form-group col-md-3">
                     <label>Login</label>
                     <input type="text" class="form-control" value="<?php echo !empty($login) ? $login : ''; ?>" required readonly>
-                </div>
-                <div class="form-group col-md-3">
-                    <label>Hasło</label>
-                    <input type="text" name="password" class="form-control" value="<?php echo !empty($password) ? $password : ''; ?>" required>
                 </div>
             </div>
             <div class="form-row">

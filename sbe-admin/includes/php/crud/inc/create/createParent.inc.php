@@ -9,6 +9,7 @@ if (!empty($_POST)) {
     $firstname = $_POST['firstname'];
     $lastname = $_POST['lastname'];
     $password = $_POST['password'];
+    $birthyear = $_POST['birthyear'];
     $team = $_POST['dropdown'];
     $parentFirstname = $_POST['parentFirstname'];
     $parentLastname = $_POST['parentLastname'];
@@ -55,9 +56,9 @@ if (!empty($_POST)) {
             $row = $query->fetch(PDO::FETCH_ASSOC);
             $parentId = $row['id'];
         }
-        $sqlINSERT = "INSERT INTO sbe_students (login,email,phone,firstname,lastname, password, team, id_parent_key, ischild) values(?, ?, ?, ?, ?, ?, ?, ?,?)";
+        $sqlINSERT = "INSERT INTO sbe_students (login,email,phone,firstname,lastname, password, birthday, team, id_parent_key, ischild) values(?, ?, ?, ?, ?, ?, ?, ?, ?,?)";
         $sqlUserExist = "SELECT login FROM sbe_students WHERE email = ? ";
-        $arrayOfInputs = array($login, $email, $phone, $firstname, $lastname, $password, $team, $parentId, "1");
+        $arrayOfInputs = array($login, $email, $phone, $firstname, $lastname, $password, $birthyear, $team, $parentId, "1");
         $userType = "students";
         addUser($sqlINSERT, $sqlUserExist, $arrayOfInputs);
         //fragment z create additionals
@@ -157,6 +158,10 @@ if (!empty($_POST)) {
                     <?php
                     include("../methods/dropdown.php");
                     ?>
+                </div>
+                <div class="form-group col-md-3">
+                    <label>Rok urodzenia</label>
+                    <input type="number" name="birthyear" class="form-control" value="<?php echo !empty($birthyear) ? $birthyear : ''; ?>">
                 </div>
             </div>
             <div class="form-row">
