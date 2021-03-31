@@ -16,7 +16,7 @@
   $nextLessonData = array();
 
   foreach ($teamDatas as $teamData) {
-    $sqlNextLesson = "SELECT * FROM sbe_lesson WHERE team_id=? AND ( date=? AND lesson_time >= ? OR date>?) ORDER BY date, lesson_time ASC LIMIT 1";
+    $sqlNextLesson = "SELECT * FROM sbe_lesson WHERE team_id=? AND ( (date=? AND lesson_time >= ?) OR date>?) ORDER BY date, lesson_time ASC LIMIT 1";
     $nextLessonDatas = selectTeamLess($sqlNextLesson, array($teamData['id'], $today, $now, $today), $pdo, true);
     $nextLessonData = array_merge($nextLessonData, $nextLessonDatas);
   }
@@ -47,7 +47,7 @@
     $lessonAdditional = $_POST['lessonAdditional'];
     $sqlUpdateLesson = "UPDATE sbe_lesson set topic=?,challenge=?, additional=? WHERE id=?";
     $arrayUpdate = array($lessonTopic, $lessonChallenge, $lessonAdditional, $id);
-    selectTeamLess($sqlUpdateLesson, $arrayUpdate, $pdo, false);
+    insertData($sqlUpdateLesson, $arrayUpdate, $pdo);
   }
 
   Database::disconnect();
@@ -149,5 +149,10 @@ function sortAsc($a, $b)
 function sortDesc($a, $b)
 {
   return strtotime($b['lesson_time']) - strtotime($a["lesson_time"]);
+}
+function insertData($sql, $array, $pdo)
+{
+  $p = $pdo->prepare($sql);
+  $p->execute($array);
 }
 ?>

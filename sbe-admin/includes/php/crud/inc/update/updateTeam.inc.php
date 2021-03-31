@@ -13,7 +13,7 @@ if (!empty($_POST)) {
     $email = $_POST['email'];
     $team_name = $_POST['team_name'];
     $start_date = $_POST['start'];
-    $goal = $_POST['goal'];
+   
     $end_date = $_POST['end'];
     $frequency = $_POST['frequency'];
     $team_time = $_POST['team_time'];
@@ -27,8 +27,8 @@ if (!empty($_POST)) {
     $valid = true;
     if ($valid) {
         $sqlUserExist = "SELECT team_name FROM sbe_teams WHERE team_name= ?";
-        $sqlINSERT = "UPDATE sbe_teams set leader_id=?, team_name=?,  goal=?, start_date=?, end_date=?,rec_pattern=? , team_time=?, end_time=?, color=?  WHERE id = ?";
-        $arrayOfInputs = array($leader_id, $team_name,  $goal, $start_date, $end_date, $frequency, $team_time, $end_time, $color, $id);
+        $sqlINSERT = "UPDATE sbe_teams set leader_id=?, team_name=?,   start_date=?, end_date=?,rec_pattern=? , team_time=?, end_time=?, color=?  WHERE id = ?";
+        $arrayOfInputs = array($leader_id, $team_name,  $start_date, $end_date, $frequency, $team_time, $end_time, $color, $id);
         $userType = "teams";
         addFutureUser($sqlINSERT, $arrayOfInputs);
         header("Location: ../../main.php?p=$userType");
@@ -37,12 +37,17 @@ if (!empty($_POST)) {
     $pdo = Database::connect();
 
     //tu też jointa dodać
-    $sql = 'SELECT sbe_teams.id as team_id, sbe_teams.start_date as start_date ,sbe_teams.amount as amount, sbe_teams.end_date as end_date, sbe_teams.team_time as team_time, sbe_teams.goal as goal ,sbe_teams.end_time as end_time, sbe_teams.color as color ,sbe_teams.rec_pattern as frequency, sbe_teams.team_name as team_name, sbe_teams.leader_id, sbe_teachers.firstname, sbe_teachers.lastname, sbe_teachers.email as email  FROM sbe_teams INNER JOIN sbe_teachers ON sbe_teams.leader_id=sbe_teachers.id WHERE sbe_teams.id=?';
+    $sql = 'SELECT sbe_teams.id as team_id, sbe_teams.start_date as start_date ,sbe_teams.amount as amount, sbe_teams.end_date as end_date, sbe_teams.team_time as team_time,  
+    sbe_teams.end_time as end_time, sbe_teams.color as color ,sbe_teams.rec_pattern as frequency, 
+    sbe_teams.team_name as team_name, sbe_teams.leader_id, sbe_teachers.firstname, sbe_teachers.lastname, sbe_teachers.email as email  
+    FROM sbe_teams 
+    INNER JOIN sbe_teachers ON sbe_teams.leader_id=sbe_teachers.id 
+    WHERE sbe_teams.id=?';
     $q = $pdo->prepare($sql);
     $q->execute([$id]);
     $data = $q->fetch(PDO::FETCH_ASSOC);
     $email = $data['email'];
-    $goal = $data['goal'];
+  
     $team_time = $data['team_time'];
     $end_time = $data['end_time'];
     $color = $data['color'];
@@ -67,10 +72,7 @@ if (!empty($_POST)) {
             </div>
             <div class="form-row">
 
-                <div class="form-group col-md-3">
-                    <label>Cel</label>
-                    <input type="text" name="goal" class="form-control" value="<?php echo !empty($goal) ? $goal : ''; ?>">
-                </div>
+               
                 <div class="form-group col-md-3">
                     <label>Kolor</label>
                     <input type="color" name="color" class="form-control" value="<?php echo !empty($color) ? $color : ''; ?>" required>

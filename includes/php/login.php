@@ -41,7 +41,14 @@ if (isset($_POST['login-submit'])) {
             if (!empty($result)) {
                 $pwdCheck = password_verify($password, $result['password']);
                 if ($pwdCheck == false) {
-                    header("Location: ./../../index.php?error=wrongpwd");
+                    if($userType=="teacher")
+                    {
+                        header("Location: ./../../sbe_teacher.php?error=wrongpwd");
+                    }
+                    else
+                    {
+                        header("Location: ./../../index.php?error=wrongpwd");
+                    }
                     exit();
                 } else if ($pwdCheck == true) {
                     session_start();
@@ -53,7 +60,14 @@ if (isset($_POST['login-submit'])) {
                     exit();
                 }
             } else {
-                header("Location: ./../../index.php?error=nouser");
+                if($userType=="teacher")
+                {
+                    header("Location: ./../../sbe_teacher.php?error=nouser");
+                }
+                else
+                {
+                    header("Location: ./../../index.php?error=nouser");
+                }
                 exit();
             }
         }

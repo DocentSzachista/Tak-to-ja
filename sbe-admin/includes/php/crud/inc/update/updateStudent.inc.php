@@ -34,6 +34,8 @@ if (!empty($_POST)) {
     $q->execute(array($id));
     $query = $q->fetch(PDO::FETCH_ASSOC);
     $teamToCheck = $query['team'];
+    $parentId=$query['id_parent_key'];
+    $isChild=$query['ischild'];
     // validate input
     $valid = true;
     if ($valid) {
@@ -49,13 +51,13 @@ if (!empty($_POST)) {
             require_once('../inc/create/addAttendance.php');
         }
 
-        if ($data['ischild'] == 1) {
+        if ($isChild == 1) {
             $parentFirstName = $_POST['parentFirstname'];
             $parentLastName = $_POST['parentLastname'];
             $parentPhone = $_POST['parent-phone'];
             $parentEmail = $_POST['parent-email'];
             $sqlINSERT = "UPDATE sbe_parents SET firstname=?, lastname=?, phone=?, email = ? WHERE id = ?";
-            $arrayOfInputs = array($parentFirstName, $parentLastName, $parentPhone, $parentEmail, $id);
+            $arrayOfInputs = array($parentFirstName, $parentLastName, $parentPhone, $parentEmail, $parentId);
             addFutureUser($sqlINSERT,  $arrayOfInputs);
         }
         header("Location: ../../main.php?p=students");
