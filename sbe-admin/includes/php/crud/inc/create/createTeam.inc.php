@@ -15,9 +15,19 @@ if (!empty($_POST)) {
     $color = $_POST['color'];
 
     $email = $_POST['email'];
+    $email_2= $_POST['email2'];
     $sql = "SELECT * FROM sbe_teachers where email = ?";
     //funkcja doszukująca się nauczyciela w bazie po mailu
     $leader_id = searchUser($email, $sql, 'id');
+    // dodać ifa sprawdzającego czy w ogóle coś jest w drugim
+    if(!empty($email_2))
+    {
+        $leader_id_2 = searchUser($email_2, $sql, 'id');
+    }
+    else
+    {
+        $leader_id_2=null;
+    }
     if (empty($leader_id)) {
         header("Location: ../../main.php?p=error");
     }
@@ -26,9 +36,10 @@ if (!empty($_POST)) {
 
     // insert data
     if ($valid) {
-        $sqlINSERT = "INSERT INTO sbe_teams (leader_id, team_name, goal, start_date, end_date, team_time, rec_pattern, amount, end_time, color) values(?,?,?, ?, ?, ?, ?, ?, ?, ?)";
+        $sqlINSERT = "INSERT INTO sbe_teams (leader_id, team_name,  start_date, end_date, team_time, rec_pattern, amount, end_time, color, leader2_id) 
+        values(?, ?,  ?, ?, ?, ?, ?, ?, ?, ?)";
         $sqlUserExist = "SELECT team_name FROM sbe_teams WHERE team_name= ?";
-        $arrayOfInputs = array($leader_id, $team_name, $goal, $start_date, $end_date,  $team_time, $frequency, $amount, $end_time, $color);
+        $arrayOfInputs = array($leader_id, $team_name,  $start_date, $end_date,  $team_time, $frequency, $amount, $end_time, $color, $leader_id_2);
         $userType = "teams";
         //zawierasz którą kolumnę tabel sprawdzasz czy użytkownik istnieje 
         $lastId = addTeam($sqlINSERT, $sqlUserExist, $arrayOfInputs);
@@ -63,6 +74,10 @@ if (!empty($_POST)) {
                     <label for="emailInput">Email nauczyciela</label>
                     <input type="email" id="emailInput" name="email" class="form-control" value="<?php echo !empty($email) ? $email : ''; ?>" required>
                 </div>
+                <div class="form-group col-md-3">
+                    <label for="emailInput">Email drugiego nauczyciela</label>
+                    <input type="email" id="emailInput" name="email2" class="form-control" value="<?php echo !empty($email_2) ? $email_2 : ''; ?>" >
+                </div>
             </div>
             <div class="form-row">
                 <div class="form-group col-md-3">
@@ -80,10 +95,7 @@ if (!empty($_POST)) {
                     <label>Co ile dni?</label>
                     <input type="text" name="frequency" class="form-control" value="<?php echo !empty($frequency) ? $frequency : ''; ?>" required>
                 </div>
-                <div class="form-group col-md-3">
-                    <label>Cel</label>
-                    <input type="text" name="goal" class="form-control" value="<?php echo !empty($goal) ? $goal : ''; ?>">
-                </div>
+              
             </div>
 
             <div class="form-row">

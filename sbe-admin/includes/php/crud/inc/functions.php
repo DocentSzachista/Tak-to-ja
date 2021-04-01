@@ -48,6 +48,9 @@
             }
         }
     }
+    /*
+        Funkcja do wyszukiwania użytkownika: przyjmuje to co wpiszemy, potem komendę sql i jaką kolumnę chcemy zwrocic
+    */
     function searchUser($itemGiven, $sql, $itemRetrieved)
     {
         $pdo = Database::connect();
@@ -58,6 +61,9 @@
         Database::disconnect();
         return $data[$itemRetrieved];
     }
+    /*
+        Funkcja paginująca, przyjmuje na wejscie: tabelę po której ma następować paginacja, ilość rekordów na stronę, miejsce od któego zaczyna.
+    */
     function pagin($page_query, $num_per_page, $start_from)
     {
         $pdo= Database::connect();
@@ -66,6 +72,9 @@
         $total_pages = ceil($total_record / $num_per_page);
         return $total_pages;
     }
+    /*
+        Funkcja do wrzucania zmian w bazie danych 
+    */
     function addFutureUser($sqlINSERT, $arrayOfInputs)
     {
         $pdo = Database::connect();

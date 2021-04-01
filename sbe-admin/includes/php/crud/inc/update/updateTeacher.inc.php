@@ -16,7 +16,8 @@ if (!empty($_POST)) {
     $phone = $_POST['phone'];
     // validate input
     $valid = true;
-    if ($valid) {
+    if ($valid) 
+    {
         $sqlUserExist = "SELECT login FROM sbe_teachers WHERE email= ?";
         $sqlINSERT = "UPDATE sbe_teachers set firstname=?, email = ?, lastname=?, phone=? WHERE id = ?";
         $arrayOfInputs = array( $firstname, $email, $lastname, $phone, $id);
