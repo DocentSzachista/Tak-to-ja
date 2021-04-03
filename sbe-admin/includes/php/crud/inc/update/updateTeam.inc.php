@@ -73,7 +73,7 @@ if (!empty($_POST)) {
     $leader_id_replacement=$data['replacement'];
     echo $leader_id2. " ". $leader_id_replacement;
     // TODO: Wykminić czemu nie wyrzuca dwóch maili tak jak powinno var_dump($data);
-    $sql = 'SELECT email FROM sbe_teachers WHERE id=? OR id=?';
+    $sql = 'SELECT id, email FROM sbe_teachers WHERE id=? OR id=?';
     $q = $pdo->prepare($sql);
     $q->execute(array($leader_id_replacement, $leader_id2 ));
     $data = $q->fetchAll();
@@ -81,7 +81,7 @@ if (!empty($_POST)) {
     //pętla taka na siłę by wyświetlić wszystkie maile
     foreach($data as $row)
     {
-        if($iterate==0)
+        if($row['id']==$leader_id2)
         {
             $email_2=$row['email'];
         }

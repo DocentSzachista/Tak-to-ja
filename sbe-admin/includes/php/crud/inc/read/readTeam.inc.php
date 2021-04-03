@@ -14,7 +14,7 @@ if (null == $id) {
   //sql statement tam gdzie id=? to sobie wybiera?
   $sql = "SELECT * FROM sbe_teams where id  = ?";
   $data = getRowQuery($sql, $id);
-  $sql = "SELECT firstname, lastname, email, phone FROM sbe_teachers WHERE id=? OR id=? OR id=?";
+  $sql = "SELECT id, firstname, lastname, email, phone FROM sbe_teachers WHERE id=? OR id=? OR id=?";
   $teacherData= readData(array($data['leader_id'], $data['leader2_id'], $data['leader_3id']), $sql);
 
   // SELECKA W SQL'u by wybrac trzech nauczycieli zrobiona na debila
@@ -39,16 +39,12 @@ if (null == $id) {
 
 <div class="container">
   <div class="span10 offset1">
-    <div class="row">
-      </br>
-      <h3> Nauczyciele </h3>
-      <hr style="width: 100%; height: 1px; background-color:lightgray;" />
-    </div>
+   
 <?php 
     $iterate=0;
    foreach($teacherData as $row)
    {
-     if($iterate==2)
+     if($data['leader_3id']==$row['id'])
      {
        ?>
         <div class="row">
@@ -57,6 +53,17 @@ if (null == $id) {
       <hr style="width: 100%; height: 1px; background-color:lightgray;" />
     </div>
        <?php
+     }
+     else
+     {
+       ?>
+      <div class="row">
+      </br>
+      <h3> Nauczyciel <?php echo $iterate+1;?> </h3>
+      <hr style="width: 100%; height: 1px; background-color:lightgray;" />
+    </div>
+    <?php
+    $iterate++;
      }
 ?>
       <div class="form-row">
@@ -84,7 +91,6 @@ if (null == $id) {
       </div>
       
 <?php
-$iterate++;
 } 
 ?>
     <div class="row">
