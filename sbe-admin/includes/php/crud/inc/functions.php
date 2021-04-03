@@ -123,6 +123,6 @@ function getRowQuery($sql, $id)
     $q = $pdo->prepare($sql);
     $q->execute(array($id));
     $data = $q->fetch(PDO::FETCH_ASSOC);
-    Database::disconnect();
+    //Database::disconnect();
     return $data;
 }

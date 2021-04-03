@@ -68,8 +68,10 @@ if (isset($_POST['add-lesson-submit'])) {
         }
 }
 
-if (isset($_POST['delete-lesson'])) {
-    if (!empty($_POST['lesson_id'])) {
+if (isset($_POST['delete-lesson'])) 
+{
+    if (!empty($_POST['lesson_id'])) 
+    {
         $id = $_POST['lesson_id'];
         $pdo = Database::connect();
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -77,8 +79,46 @@ if (isset($_POST['delete-lesson'])) {
         $q = $pdo->prepare($sql);
         $q->execute(array($id));
         $data = $q->fetch(PDO::FETCH_ASSOC);
+        $team_id=$data['team_id'];
+        $get_last_date="SELECT * FROM sbe_teams WHERE id = ?";
+        $team_data=getRowQuery($get_last_date, $team_id);
+        //Sekcja na zmienne do wpierdzielenia je w kolejną lekcję
+        $team_name=$team_data['team_name'];
+        $occurence=$team_data['rec_pattern'];
+        $last_date=$team_data['end_date'];
+        $amount=$team_data['amount'];
+        $time_begin=$team_data['team_time'];
+        $time_end=$team_data['end_time'];
+        $date_end=new DateTime($last_date);
+        $date_end->add(new DateInterval("P" . $occurence  . "D"));
+        $stringDate = $date_end->format('Y-m-d');
+
+
+
+        echo $stringDate;
+        $sqlINSERT = "INSERT INTO sbe_lesson (team_id, date, lesson_time, end_time) values(?,?,?,?)";
+        $array= array($team_id, $stringDate, $time_begin, $time_end  );
+        $newLastLessonId = addFutureUser($sqlINSERT, $array);
+
+        /*****************************************
+        fragment dodawania obecnosci dla uczniakow 
+        ******************************************/
+        $sql="SELECT * FROM sbe_students WHERE team=?";
+        $sth=$pdo->prepare($sql);
+        $sth->execute([$team_name]);
+        $attendance=$sth->fetchAll();
+        foreach($attendance as $row)
+        {
+            $sqlAttendance="INSERT INTO sbe_attendance (lesson_id, student_id) VALUES(?,?)";
+            $arrayOfInputs=array($newLastLessonId, $row['id']);
+            addFutureUser($sqlAttendance, $arrayOfInputs);
+        }
+        $sql="UPDATE sbe_teams SET end_date = ?  WHERE id=?";
+        $arrayOfInputs= array($stringDate, $team_id);
+        addFutureUser($sql, $arrayOfInputs);
     }
-    if (!empty($_POST)) {
+    if (!empty($_POST))
+    {
         $sql = "DELETE FROM sbe_lesson WHERE id = ?";
         delete($sql, true);
     }
