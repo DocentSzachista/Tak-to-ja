@@ -44,7 +44,7 @@ if (!empty($_POST)) {
         //zawierasz którą kolumnę tabel sprawdzasz czy użytkownik istnieje 
         $lastId = addTeam($sqlINSERT, $sqlUserExist, $arrayOfInputs);
         for ($i = 0; $i <= $amount; $i++) {
-            $sqlINSERT = "INSERT INTO  sbe_lesson (team_id, date, lesson_time, end_time) values(?,?, ?, ?)";
+            $sqlINSERT = "INSERT INTO  sbe_lesson (team_id, date, lesson_time, end_time) values(?, ?, ?, ?)";
             $date = new DateTime($start_date);
             $date->add(new DateInterval("P" . $frequency * $i . "D"));
             $stringDate = $date->format('Y-m-d');

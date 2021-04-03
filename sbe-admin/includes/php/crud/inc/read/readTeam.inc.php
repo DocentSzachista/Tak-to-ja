@@ -1,5 +1,6 @@
 <?php
 require '../connectDB_CRUD.php';
+require '../inc/functions.php';
 $id = null;
 if (!empty($_GET['id'])) {
   $id = $_REQUEST['id'];
@@ -12,46 +13,80 @@ if (null == $id) {
   $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
   //sql statement tam gdzie id=? to sobie wybiera?
   $sql = "SELECT * FROM sbe_teams where id  = ?";
-  $q = $pdo->prepare($sql);
-  $q->execute(array($id));
-  $data = $q->fetch(PDO::FETCH_ASSOC);
-  $sql = "SELECT * FROM sbe_teachers WHERE id=?";
-  $q = $pdo->prepare($sql);
-  $q->execute(array($data['leader_id']));
-  $teacherData = $q->fetch(PDO::FETCH_ASSOC);
+  $data = getRowQuery($sql, $id);
+  $sql = "SELECT firstname, lastname, email, phone FROM sbe_teachers WHERE id=? OR id=? OR id=?";
+  $teacherData= readData(array($data['leader_id'], $data['leader2_id'], $data['leader_3id']), $sql);
+
+  // SELECKA W SQL'u by wybrac trzech nauczycieli zrobiona na debila
+  /*
+  $sql = "SELECT firstname, lastname, email, phone FROM sbe_teachers WHERE id=?";
+  $teacherData= getRowQuery($sql, $data['leader_id']);
+  if($data['leader2_id']!=null)
+  {
+      $sql = "SELECT firstname, lastname, email, phone FROM sbe_teachers WHERE id=?";
+      $teacherData2= getRowQuery($sql, $data['leader2_id']);
+  }
+  if($data['leader_3id']!=null)
+  {
+      $sql = "SELECT firstname, lastname, email, phone FROM sbe_teachers WHERE id=?";
+      $teacherData3= getRowQuery($sql, $data['leader_3id']);
+  }
+  */
   $sql = "SELECT * FROM sbe_students where team = ?";
   $result = readData(array($data['team_name']), $sql);
 }
 ?>
+
 <div class="container">
   <div class="span10 offset1">
     <div class="row">
       </br>
-      <h3> Nauczyciel </h3>
+      <h3> Nauczyciele </h3>
       <hr style="width: 100%; height: 1px; background-color:lightgray;" />
     </div>
-    <div class="form-row">
-      <div class="form-group col-md-3">
-        <label>Imię</label>
-        <input type="text" class="form-control" value='<?php echo !empty($teacherData['firstname']) ? $teacherData['firstname'] : ''; ?>' readonly required>
-      </div>
-      <div class="form-group col-md-3">
-        <label>Nazwisko</label>
-        <input type='text' class="form-control" value='<?php echo !empty($teacherData['lastname']) ? $teacherData['lastname'] : ''; ?>' readonly required>
-      </div>
+<?php 
+    $iterate=0;
+   foreach($teacherData as $row)
+   {
+     if($iterate==2)
+     {
+       ?>
+        <div class="row">
+      </br>
+      <h3> Zastępca </h3>
+      <hr style="width: 100%; height: 1px; background-color:lightgray;" />
     </div>
-    <div class="form-row">
-      <div class="form-group col-md-3">
-        <label>Numer telefonu</label>
-        <input type="text" class="form-control" value='<?php echo !empty($teacherData['phone']) ? $teacherData['phone'] : ''; ?>' readonly required>
+       <?php
+     }
+?>
+      <div class="form-row">
+        <div class="form-group col-md-3">
+          <label>Imię</label>
+          <input type="text" class="form-control" value='<?php echo !empty($row['firstname']) ? $row['firstname'] : ''; ?>' readonly required>
+        </div>
+        <div class="form-group col-md-3">
+          <label>Nazwisko</label>
+          <input type='text' class="form-control" value='<?php echo !empty($row['lastname']) ? $row['lastname'] : ''; ?>' readonly required>
+        </div>
       </div>
-      <div class="form-group col-md-3">
-        <label>Email</label>
-        <input type='text' class="form-control" value='<?php echo !empty($teacherData['email']) ? $teacherData['email'] : ''; ?>' readonly required>
-        <br>
-        <br>
+      <div class="form-row">
+        <div class="form-group col-md-3">
+          <label>Numer telefonu</label>
+          <input type="text" class="form-control" value='<?php echo !empty($row['phone']) ? $row['phone'] : ''; ?>' readonly required>
+        </div>
+        
+        <div class="form-group col-md-3">
+          <label>Email</label>
+          <input type='text' class="form-control" value='<?php echo !empty($row['email']) ? $row['email'] : ''; ?>' readonly required>
+          <br>
+          <br>
+        </div>
       </div>
-    </div>
+      
+<?php
+$iterate++;
+} 
+?>
     <div class="row">
       <h3>Uczestnicy grupy <?php echo $data['team_name']; ?></h3>
       <hr style="width: 100%; height: 1px; background-color:lightgray;" />
@@ -95,6 +130,7 @@ function readData($array, $sql)
   $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
   $q = $pdo->prepare($sql);
   $q->execute($array);
+  Database::disconnect();
   return $q->fetchAll();
 }
 

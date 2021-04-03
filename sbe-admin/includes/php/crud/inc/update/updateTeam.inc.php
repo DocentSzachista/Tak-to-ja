@@ -71,16 +71,26 @@ if (!empty($_POST)) {
     $team_name = $data['team_name'];
     $leader_id2=$data['id3'];
     $leader_id_replacement=$data['replacement'];
+    echo $leader_id2. " ". $leader_id_replacement;
     // TODO: Wykminić czemu nie wyrzuca dwóch maili tak jak powinno var_dump($data);
     $sql = 'SELECT email FROM sbe_teachers WHERE id=? OR id=?';
     $q = $pdo->prepare($sql);
-    $q->execute([$leader_id_replacement, $leader_id2 ]);
-    $data = $q->fetch(PDO::FETCH_ASSOC);
-    $email_2=$data['email'];
-    $email_replacement=$data['email'];
-    
-    
-     
+    $q->execute(array($leader_id_replacement, $leader_id2 ));
+    $data = $q->fetchAll();
+    $iterate=0;
+    //pętla taka na siłę by wyświetlić wszystkie maile
+    foreach($data as $row)
+    {
+        if($iterate==0)
+        {
+            $email_2=$row['email'];
+        }
+        else
+        {
+            $email_replacement=$row['email'];
+        }
+        $iterate++;
+    }
 }
 ?>
 

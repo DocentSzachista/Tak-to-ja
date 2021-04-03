@@ -115,3 +115,14 @@ function deleteUser($sql, $id)
     $q->execute(array($id));
     Database::disconnect();
 }
+function getRowQuery($sql, $id)
+{
+    $pdo = Database::connect();
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    //$sql = "DELETE FROM sbe_students WHERE id = ?";
+    $q = $pdo->prepare($sql);
+    $q->execute(array($id));
+    $data = $q->fetch(PDO::FETCH_ASSOC);
+    Database::disconnect();
+    return $data;
+}
