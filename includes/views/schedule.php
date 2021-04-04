@@ -71,9 +71,9 @@
                                 $iteration = array_unique(array_merge($iteration, $iterations), SORT_REGULAR);
                             }
                         } else if ($userType == "teacher") {
-                            $sqlTeam = "SELECT * FROM sbe_teams where leader_id=?";
+                            $sqlTeam = "SELECT * FROM sbe_teams WHERE leader_id=? OR leader2_id=? OR leader_3id = ?";
                             $t = $pdo->prepare($sqlTeam);
-                            $t->execute(array($userData['id']));
+                            $t->execute(array($userData['id'],$userData['id'], $userData['id'] ));
                             $teamData = $t->fetchALL();
                             $iteration = array();
                             foreach ($teamData as $row) {
