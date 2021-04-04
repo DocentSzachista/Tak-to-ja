@@ -15,6 +15,11 @@ if (!empty($_POST)) {
     $end_date = $_POST['end'];
     $amount = $_POST['amount'];
     */
+    /*************************
+     * przeklej zmienne od linijki 29 do 34
+     * przeklej linijki 44 i 45 aby zmienić sql'a
+     * przekleic pętle oraz wydobywanie maili nauczycieli
+     */
     $email = $_POST['email'];
     $team_name = $_POST['team_name'];
     $team_time = $_POST['team_time'];

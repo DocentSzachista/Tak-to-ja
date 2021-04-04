@@ -71,10 +71,12 @@
                                 $iteration = array_unique(array_merge($iteration, $iterations), SORT_REGULAR);
                             }
                         } else if ($userType == "teacher") {
+                            // Tutaj podmień SQL'a z wersją z serwera
                             $sqlTeam = "SELECT * FROM sbe_teams WHERE leader_id=? OR leader2_id=? OR leader_3id = ?";
                             $t = $pdo->prepare($sqlTeam);
                             $t->execute(array($userData['id'],$userData['id'], $userData['id'] ));
                             $teamData = $t->fetchALL();
+                            // Tu kończ 
                             $iteration = array();
                             foreach ($teamData as $row) {
                                 $sql = "SELECT * FROM sbe_lesson WHERE team_id=?";

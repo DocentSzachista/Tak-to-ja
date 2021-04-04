@@ -36,6 +36,12 @@ if (!empty($_POST)) {
 
     // insert data
     if ($valid) {
+        /******************************************************************************** 
+         * Przeklej sql'a tablicę, nazwę dodatkowej zmiennej i dodatkowy form ($email_2) 
+         * (Pamiętaj by z archiwum wywalić goal przy kopiowaniu)
+         * 
+        ************************************************************************************/
+        
         $sqlINSERT = "INSERT INTO sbe_teams (leader_id, team_name,  start_date, end_date, team_time, rec_pattern, amount, end_time, color, leader2_id) 
         values(?, ?,  ?, ?, ?, ?, ?, ?, ?, ?)";
         $sqlUserExist = "SELECT team_name FROM sbe_teams WHERE team_name= ?";

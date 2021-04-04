@@ -14,6 +14,9 @@ if (null == $id) {
   //sql statement tam gdzie id=? to sobie wybiera?
   $sql = "SELECT * FROM sbe_teams where id  = ?";
   $data = getRowQuery($sql, $id);
+  /*********************************************************  
+  Tutaj przeklej SQL'a z Teacher data oraz zawartość foreach'a
+  **********************************************************/
   $sql = "SELECT id, firstname, lastname, email, phone FROM sbe_teachers WHERE id=? OR id=? OR id=?";
   $teacherData= readData(array($data['leader_id'], $data['leader2_id'], $data['leader_3id']), $sql);
 
